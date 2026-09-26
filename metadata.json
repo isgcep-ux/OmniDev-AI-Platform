@@ -1,0 +1,7 @@
+{
+  "name": "OmniDev AI Platform",
+  "description": "Yeni nesil geliştirici platformu: Mobil, web iş istasyonları, Recharts proje analitiği ve Gemini AI mimarisini buluşturur.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
