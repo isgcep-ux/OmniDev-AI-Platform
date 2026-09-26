@@ -13,11 +13,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -37,6 +40,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.security.AppCheckSecurityManager
 import com.example.ui.components.CodeBlockView
 import com.example.ui.components.GlassmorphicCard
 import com.example.ui.components.StatusBadge
@@ -50,6 +55,7 @@ fun FirebaseSection(
     modifier: Modifier = Modifier
 ) {
     var activeModule by remember { mutableStateOf("Firestore") }
+    val appCheckStatus by AppCheckSecurityManager.status.collectAsStateWithLifecycle()
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -85,19 +91,71 @@ fun FirebaseSection(
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Seamless backend for Project IDX and web apps: Realtime Cloud Firestore, Google Auth via Credential Manager, Cloud Functions v2 triggers, and granular Security Rules.",
+                    text = "Seamless backend for Project IDX and web apps: Realtime Cloud Firestore, Google Auth via Credential Manager, Cloud Functions v2 triggers, and Firebase App Check with Play Integrity provider.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
 
+        // Live App Check Security Status Card
+        GlassmorphicCard(
+            borderColor = if (appCheckStatus.isInitialized) DevEmeraldLight.copy(alpha = 0.4f) else DevAmber.copy(alpha = 0.3f),
+            backgroundColor = MaterialTheme.colorScheme.surface
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.Shield,
+                            contentDescription = "App Check Play Integrity",
+                            tint = if (appCheckStatus.isInitialized) DevEmeraldLight else DevAmber,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Firebase App Check • Play Integrity",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    StatusBadge(
+                        text = if (appCheckStatus.isInitialized) "Secured (Play Integrity)" else "Configuring",
+                        color = if (appCheckStatus.isInitialized) DevEmeraldLight else DevAmber,
+                        icon = if (appCheckStatus.isInitialized) Icons.Default.CheckCircle else Icons.Default.Security
+                    )
+                }
+
+                Text(
+                    text = "Sağlayıcı: ${appCheckStatus.providerName} | Durum: ${appCheckStatus.statusMessage}",
+                    fontSize = 11.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                if (appCheckStatus.lastTokenSnippet != null) {
+                    Text(
+                        text = "Doğrulanmış Token: ${appCheckStatus.lastTokenSnippet} (Otomatik Yenileme Etkin)",
+                        fontFamily = FontFamily.Monospace,
+                        fontSize = 10.sp,
+                        color = DevEmeraldLight
+                    )
+                }
+            }
+        }
+
         // Submodules Selector
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            listOf("Firestore", "Auth & Identity", "Functions v2", "Security Rules").forEach { mod ->
+            listOf("Firestore", "Auth & Identity", "Functions v2", "App Check (Play Integrity)", "Security Rules").forEach { mod ->
                 val isSelected = activeModule == mod
                 Button(
                     onClick = { activeModule = mod },
@@ -106,9 +164,9 @@ fun FirebaseSection(
                         contentColor = if (isSelected) Color(0xFF451A03) else MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.weight(1f).height(40.dp).testTag("firebase_tab_$mod")
+                    modifier = Modifier.height(38.dp).testTag("firebase_tab_$mod")
                 ) {
-                    Text(mod, fontSize = 10.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+                    Text(mod, fontSize = 11.sp, fontWeight = FontWeight.Bold, maxLines = 1)
                 }
             }
         }
@@ -138,6 +196,7 @@ fun FirebaseSection(
                         "Firestore" -> "Multi-region NoSQL document store with live snapshot listeners and automatic offline synchronization."
                         "Auth & Identity" -> "Google Sign-In, OAuth2 providers, and JWT claims verified at edge and in Cloud Functions."
                         "Functions v2" -> "Cloud Run backed serverless functions responding to Firestore writes, storage uploads, and HTTP webhooks."
+                        "App Check (Play Integrity)" -> "Google Play Integrity donanım kanıtlaması (attestation) ile backend API'lerini, Cloud Firestore'u ve Cloud Functions çağrılarını yetkisiz istemcilerden ve botlardan korur."
                         else -> "Declarative granular access control enforcing user boundaries and validating field schema types."
                     },
                     style = MaterialTheme.typography.bodySmall,
@@ -194,6 +253,46 @@ export const onNewUserProject = onDocumentCreated('projects/{projectId}', async 
     timestamp: new Date()
   });
 });
+""".trimIndent()
+
+            "App Check (Play Integrity)" -> """
+// Android: Firebase App Check with Play Integrity Provider
+package com.example
+
+import android.app.Application
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
+
+class OmniDevApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        FirebaseApp.initializeApp(this)
+
+        val firebaseAppCheck = FirebaseAppCheck.getInstance()
+        // Play Integrity Provider enables hardware-backed attestation
+        firebaseAppCheck.installAppCheckProviderFactory(
+            PlayIntegrityAppCheckProviderFactory.getInstance()
+        )
+        firebaseAppCheck.setTokenAutoRefreshEnabled(true)
+    }
+}
+
+// Custom API requests (OkHttp Interceptor)
+class AppCheckInterceptor : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val appCheck = FirebaseAppCheck.getInstance()
+        val token = Tasks.await(appCheck.getAppCheckToken(false), 2, TimeUnit.SECONDS)?.token
+        val request = if (!token.isNullOrBlank()) {
+            chain.request().newBuilder()
+                .header("X-Firebase-AppCheck", token)
+                .build()
+        } else {
+            chain.request()
+        }
+        return chain.proceed(request)
+    }
+}
 """.trimIndent()
 
             else -> """

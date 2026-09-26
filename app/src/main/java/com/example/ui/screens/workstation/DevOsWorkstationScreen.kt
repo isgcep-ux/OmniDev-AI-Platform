@@ -489,6 +489,7 @@ fun DevOsWorkstationScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     TerminalQuickChip(text = "claude apk-info") { onExecuteCommand("claude apk-info") }
+                    TerminalQuickChip(text = "claude sha256") { onExecuteCommand("claude sha256") }
                     TerminalQuickChip(text = "claude test") { onExecuteCommand("claude test") }
                     TerminalQuickChip(text = "claude sys-monitor") { onExecuteCommand("claude sys-monitor") }
                     TerminalQuickChip(text = "claude env") { onExecuteCommand("claude env") }

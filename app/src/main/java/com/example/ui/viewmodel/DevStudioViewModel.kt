@@ -171,6 +171,29 @@ class DevStudioViewModel(application: Application) : AndroidViewModel(applicatio
                     • Min SDK: 24 | Hedef SDK: 36 (Android 15)
                     • Hızlı Kurulum: adb install -r .build-outputs/app-debug.apk
                     • Başlatma: adb shell am start -n com.aistudio.devstudiohub.qwmvtp/com.example.MainActivity
+                    • SHA-256 Çıkartma Komutları: 'claude sha256' yazın
+                """.trimIndent()
+                success = true
+            }
+            normalized.contains("sha") || normalized.contains("fingerprint") || normalized.contains("keytool") || normalized.contains("apksigner") -> {
+                output = """
+                    [APK SHA-256 PARMAK İZİ VE HASH BİLGİSİ]
+                    --------------------------------------------------
+                    1. İMZA SERTİFİKASI SHA-256 PARMAK İZİ (Firebase / Google API):
+                       apksigner verify --print-certs app-debug.apk
+                       veya:
+                       keytool -printcert -jarfile app-debug.apk
+
+                       Örnek Çıktı:
+                       Signer #1 certificate SHA-256 digest:
+                       2A:8B:E3:4C:19:92:DF:34:B8:31:AA:60:88:EC:32:04:1E:55:76:83:9D:44:B5:12:F6:A3:89:D2:77:E1:98:40
+
+                    2. APK DOSYASI KENDİ BÜTÜNLÜK HASH'İ (File Checksum):
+                       • Linux/macOS : sha256sum app-debug.apk
+                       • PowerShell  : Get-FileHash .\app-debug.apk -Algorithm SHA256
+                       • Windows CMD : certutil -hashfile app-debug.apk SHA256
+                    --------------------------------------------------
+                    Durum: Komutlar kopyalanabilir ve terminalde hazır.
                 """.trimIndent()
                 success = true
             }
@@ -227,6 +250,7 @@ class DevStudioViewModel(application: Application) : AndroidViewModel(applicatio
                 output = """
                     Claude Code DevOS Terminal Komutları:
                       claude apk-info          - APK dosya konumu, boyutu ve kurulum komutu
+                      claude sha256            - APK imza parmak izi ve hash alma komutları
                       claude test              - Robolectric & Unit testlerini koştur
                       claude sys-monitor       - CPU, RAM ve sistem metriklerini görüntüle
                       claude env               - Ortam değişkenleri ve API anahtarı durumu

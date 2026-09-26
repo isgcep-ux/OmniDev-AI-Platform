@@ -1,6 +1,7 @@
 package com.example.data.remote
 
 import com.example.BuildConfig
+import com.example.security.AppCheckSecurityManager
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
@@ -62,6 +63,7 @@ class GeminiApiClient {
         .connectTimeout(60, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
         .writeTimeout(60, TimeUnit.SECONDS)
+        .addInterceptor(AppCheckSecurityManager.createAppCheckInterceptor())
         .build()
 
     private val moshi = Moshi.Builder()

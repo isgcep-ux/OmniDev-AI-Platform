@@ -192,4 +192,24 @@ class ExampleUnitTest {
     assertEquals(50.0f, completedPercentage, 0.01f)
     assertEquals(25.0f, onHoldPercentage, 0.01f)
   }
+
+  @Test
+  fun appCheck_statusModel_hasSecureDefaults() {
+    val initialStatus = com.example.security.AppCheckStatus()
+    assertFalse(initialStatus.isInitialized)
+    assertTrue(initialStatus.autoRefreshEnabled)
+    assertEquals("Not Initialized", initialStatus.providerName)
+
+    val playIntegrityStatus = com.example.security.AppCheckStatus(
+      isInitialized = true,
+      providerName = "Google Play Integrity",
+      isPlayIntegrity = true,
+      autoRefreshEnabled = true,
+      lastVerifiedTimestamp = 1700000000000L,
+      statusMessage = "Play Integrity provider strictly enforced."
+    )
+    assertTrue(playIntegrityStatus.isInitialized)
+    assertTrue(playIntegrityStatus.isPlayIntegrity)
+    assertEquals("Google Play Integrity", playIntegrityStatus.providerName)
+  }
 }
