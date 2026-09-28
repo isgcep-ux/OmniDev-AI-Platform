@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İSG Cep Akademi by Ozbena – İş Sağlığı ve Güvenliği Eğitimi</title>
+    <meta name="description" content="İSG Cep Akademi ile iş sağlığı ve güvenliği eğitimlerini mobil ve web üzerinden tamamlayın. Sınav, sertifika ve Fine-Kinney risk analizi.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #2dd4bf;
+            --accent: #f59e0b;
+            --bg-dark: #0a0f0e;
+            --bg-card: #111918;
+            --text: #e7f5f2;
+            --text-muted: #8ba89f;
+            --gradient: linear-gradient(135deg, #0d9488 0%, #2dd4bf 50%, #f59e0b 100%);
+            --gradient-soft: linear-gradient(135deg, rgba(13,148,136,0.15), rgba(45,212,191,0.08));
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: rgba(10, 15, 14, 0.88);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .nav-container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+        }
+
+        .logo-icon .ring {
+            transform-origin: 24px 24px;
+            transform-box: fill-box;
+            animation: spin 20s linear infinite;
+        }
+        .logo-icon .shield {
+            transform-origin: center;
+            transform-box: fill-box;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale3d(1,1,1); opacity: 1; }
+            50% { transform: scale3d(0.94,0.94,1); opacity: 0.9; }
+        }
+        @keyframes fade-up {
+            from { opacity: 0; transform: translate3d(0, 24px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translate3d(0, 0, 0); }
+            50% { transform: translate3d(0, -10px, 0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .logo-icon .ring, .logo-icon .shield,
+            .hero-badge, .hero h1, .hero p, .hero-actions,
+            .feature-card, .module-card { animation: none !important; }
+        }
+
+        .logo-text-wrap { display: flex; flex-direction: column; line-height: 1.15; }
+        .logo-text { font-weight: 700; font-size: 1.2rem; letter-spacing: -0.03em; }
+        .logo-text span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .logo-by { font-size: 0.72rem; font-weight: 500; color: var(--text-muted); }
+        .logo-by strong { color: #5eead4; font-weight: 600; }
+
+        nav { display: flex; align-items: center; gap: 24px; }
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.92rem;
+            transition: color 0.2s;
+        }
+        nav a:hover { color: var(--text); }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 11px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--gradient);
+            color: #042f2e;
+            box-shadow: 0 4px 20px rgba(13, 148, 136, 0.35);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(13, 148, 136, 0.45);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.3);
+        }
+        .btn-lg { padding: 15px 30px; font-size: 1.02rem; }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 24px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -15%; right: -8%;
+            width: 520px; height: 520px;
+            background: radial-gradient(circle, rgba(13,148,136,0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-container {
+            max-width: 1140px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 56px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gradient-soft);
+            border: 1px solid rgba(13,148,136,0.3);
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.84rem;
+            font-weight: 500;
+            color: var(--secondary);
+            margin-bottom: 22px;
+            animation: fade-up 0.7s ease-out both;
+        }
+        .hero h1 {
+            font-size: clamp(2.2rem, 4.5vw, 3.3rem);
+            font-weight: 800;
+            line-height: 1.12;
+            letter-spacing: -0.03em;
+            margin-bottom: 18px;
+            animation: fade-up 0.8s ease-out 0.1s both;
+        }
+        .hero h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 480px;
+            margin-bottom: 32px;
+            animation: fade-up 0.8s ease-out 0.2s both;
+        }
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 40px;
+            animation: fade-up 0.8s ease-out 0.3s both;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            animation: fade-up 0.8s ease-out 0.4s both;
+        }
+        .stat strong {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat span { font-size: 0.84rem; color: var(--text-muted); }
+
+        .hero-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 18px;
+            padding: 28px;
+            animation: fade-up 0.9s ease-out 0.25s both, float 5.5s ease-in-out 1.2s infinite;
+        }
+        .hero-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--secondary);
+        }
+        .check-list { list-style: none; }
+        .check-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.94rem;
+            color: var(--text-muted);
+        }
+        .check-list li:last-child { border-bottom: none; }
+        .check-list li::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* Sections */
+        .section { padding: 90px 24px; }
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 52px;
+        }
+        .section-header h2 {
+            font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+            font-weight: 750;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+        .section-header p { color: var(--text-muted); font-size: 1.05rem; }
+
+        .features-grid {
+            max-width: 1140px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 28px 24px;
+            transition: all 0.3s ease;
+            animation: fade-up 0.7s ease-out both;
+        }
+        .feature-card:nth-child(1) { animation-delay: 0.05s; }
+        .feature-card:nth-child(2) { animation-delay: 0.12s; }
+        .feature-card:nth-child(3) { animation-delay: 0.19s; }
+        .feature-card:nth-child(4) { animation-delay: 0.26s; }
+        .feature-card:nth-child(5) { animation-delay: 0.33s; }
+        .feature-card:nth-child(6) { animation-delay: 0.40s; }
+        .feature-card:hover {
+            border-color: rgba(13,148,136,0.35);
+            transform: translateY(-4px);
+            box-shadow: 0 18px 36px rgba(0,0,0,0.3);
+        }
+        .feature-icon {
+            width: 46px; height: 46px;
+            border-radius: 12px;
+            background: var(--gradient-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 1.3rem;
+        }
+        .feature-card h3 { font-size: 1.1rem; font-weight: 650; margin-bottom: 8px; }
+        .feature-card p { color: var(--text-muted); font-size: 0.92rem; }
+
+        /* Modules */
+        .modules-grid {
+            max-width: 1140px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .module-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 24px;
+            animation: fade-up 0.7s ease-out both;
+        }
+        .module-card:nth-child(1) { animation-delay: 0.08s; }
+        .module-card:nth-child(2) { animation-delay: 0.16s; }
+        .module-card:nth-child(3) { animation-delay: 0.24s; }
+        .module-num {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--secondary);
+            letter-spacing: 0.06em;
+            margin-bottom: 8px;
+        }
+        .module-card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+        .module-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* CTA */
+        .cta { padding: 70px 24px 100px; }
+        .cta-box {
+            max-width: 860px;
+            margin: 0 auto;
+            background: var(--gradient-soft);
+            border: 1px solid rgba(13,148,136,0.25);
+            border-radius: 22px;
+            padding: 52px 36px;
+            text-align: center;
+        }
+        .cta-box h2 { font-size: 1.85rem; font-weight: 750; margin-bottom: 12px; }
+        .cta-box p { color: var(--text-muted); margin-bottom: 28px; font-size: 1.05rem; }
+
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: 36px 24px;
+        }
+        .footer-inner {
+            max-width: 1140px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .footer-copy { color: var(--text-muted); font-size: 0.86rem; }
+
+        @media (max-width: 900px) {
+            .hero-container { grid-template-columns: 1fr; gap: 40px; }
+            .hero-card { order: -1; }
+            .features-grid, .modules-grid { grid-template-columns: 1fr; }
+            nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <svg class="logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="İSG Cep Akademi">
+                    <defs>
+                        <linearGradient id="isgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#0d9488"/>
+                            <stop offset="55%" stop-color="#2dd4bf"/>
+                            <stop offset="100%" stop-color="#f59e0b"/>
+                        </linearGradient>
+                    </defs>
+                    <circle class="ring" cx="24" cy="24" r="21" stroke="url(#isgGrad)" stroke-width="2.2" fill="none" opacity="0.85"/>
+                    <!-- Shield -->
+                    <path class="shield" d="M24 10 L34 14.5 V24.5 C34 30.5 29.5 35.5 24 37.5 C18.5 35.5 14 30.5 14 24.5 V14.5 Z"
+                          fill="url(#isgGrad)" opacity="0.95"/>
+                    <path d="M24 16 L30 18.8 V24.2 C30 28.5 27.2 32 24 33.5 C20.8 32 18 28.5 18 24.2 V18.8 Z"
+                          fill="#042f2e" opacity="0.35"/>
+                    <path d="M21.2 24.2 L23 26 L27.2 21.5" stroke="#042f2e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                <div class="logo-text-wrap">
+                    <div class="logo-text">İSG <span>Cep Akademi</span></div>
+                    <div class="logo-by">by <strong>Ozbena</strong></div>
+                </div>
+            </a>
+            <nav>
+                <a href="#features">Özellikler</a>
+                <a href="#modules">Modüller</a>
+                <a href="#sertifika">Sertifika</a>
+                <a href="#cta" class="btn btn-primary">Eğitime Başla</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div>
+                <div class="hero-badge">🛡️ İş Sağlığı ve Güvenliği · Cep Akademi</div>
+                <h1>İSG eğitimini <span>cebinizde</span> tamamlayın</h1>
+                <p>
+                    Mevzuata uygun kurslar, interaktif sınavlar ve e-sertifika.
+                    Fine-Kinney risk analizi ve saha uygulamaları tek platformda.
+                </p>
+                <div class="hero-actions">
+                    <a href="#cta" class="btn btn-primary btn-lg">Ücretsiz Dene</a>
+                    <a href="#modules" class="btn btn-outline btn-lg">Modülleri İncele</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <strong>50+</strong>
+                        <span>Eğitim modülü</span>
+                    </div>
+                    <div class="stat">
+                        <strong>12k+</strong>
+                        <span>Sertifikalı katılımcı</span>
+                    </div>
+                    <div class="stat">
+                        <strong>%98</strong>
+                        <span>Memnuniyet</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-card">
+                <h3>Kurulumda neler var?</h3>
+                <ul class="check-list">
+                    <li>Temel ve ileri İSG mevzuat eğitimleri</li>
+                    <li>Online sınav + otomatik değerlendirme</li>
+                    <li>Fine-Kinney risk değerlendirme aracı</li>
+                    <li>E-sertifika (PDF / QR doğrulamalı)</li>
+                    <li>Sesli anlatım ve altyazılı video</li>
+                    <li>com · com.tr · xyz alan adı paketi</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="features">
+        <div class="section-header">
+            <h2>Neden İSG Cep Akademi?</h2>
+            <p>Saha ekipleri ve İSG uzmanları için pratik, mobil uyumlu eğitim.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Cep Dostu</h3>
+                <p>Şantiyede, fabrikada veya yolda — tüm içerik mobil ve çevrimdışı destekli.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📋</div>
+                <h3>Mevzuat Uyumlu</h3>
+                <p>6331 sayılı İSG Kanunu ve güncel yönetmeliklere göre hazırlanmış içerik.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Fine-Kinney</h3>
+                <p>Risk skoru hesaplama, matris ve aksiyon planı araçları yerleşik.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎓</div>
+                <h3>Sınav & Sertifika</h3>
+                <p>Modül sonu sınavları, başarı belgesi ve QR ile doğrulanabilir e-sertifika.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔊</div>
+                <h3>Ses & Video Stüdyo</h3>
+                <p>Klon ses anlatım ve altyazılı videolar ile öğrenmeyi hızlandırın.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏢</div>
+                <h3>Kurumsal Panel</h3>
+                <p>Çalışan ilerlemesi, raporlar ve toplu atama tek yönetim ekranından.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="modules" style="padding-top: 40px;">
+        <div class="section-header">
+            <h2>Örnek eğitim modülleri</h2>
+            <p>Temel, sektörel ve uzmanlık seviyelerinde hazır paketler.</p>
+        </div>
+        <div class="modules-grid">
+            <div class="module-card">
+                <div class="module-num">MODÜL 01</div>
+                <h3>İSG Temel Eğitimi</h3>
+                <p>Haklar, yükümlülükler, kaza bildirimi ve acil durum prosedürleri.</p>
+            </div>
+            <div class="module-card">
+                <div class="module-num">MODÜL 02</div>
+                <h3>Yüksekte Çalışma</h3>
+                <p>İskele, platform, PPE seçimi ve düşme önleme sistemleri.</p>
+            </div>
+            <div class="module-card">
+                <div class="module-num">MODÜL 03</div>
+                <h3>Risk Değerlendirme</h3>
+                <p>Fine-Kinney yöntemi, 5x5 matris ve aksiyon takibi.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="cta">
+        <div class="cta-box">
+            <h2>İSG Cep Akademi’yi şimdi kurun</h2>
+            <p>by Ozbena — Eğitim, sınav ve sertifika tek pakette.</p>
+            <a href="#" class="btn btn-primary btn-lg">Eğitime Başla</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <svg width="28" height="28" viewBox="0 0 48 48" fill="none">
+                    <defs>
+                        <linearGradient id="fg" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#0d9488"/>
+                            <stop offset="100%" stop-color="#2dd4bf"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="24" cy="24" r="21" stroke="url(#fg)" stroke-width="2.2" fill="none"/>
+                    <path d="M24 10 L34 14.5 V24.5 C34 30.5 29.5 35.5 24 37.5 C18.5 35.5 14 30.5 14 24.5 V14.5 Z" fill="url(#fg)"/>
+                </svg>
+                İSG Cep Akademi <span style="color:var(--text-muted);font-weight:400">by Ozbena</span>
+            </div>
+            <div class="footer-copy">© 2026 Ozbena. Tüm hakları saklıdır.</div>
+        </div>
+    </footer>
+</body>
+</html>
