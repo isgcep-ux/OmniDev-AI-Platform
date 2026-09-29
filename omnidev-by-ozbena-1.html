@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniDev AI Platform by Ozbena – Yapay Zeka Geliştirmenin Geleceği</title>
+    <meta name="description" content="OmniDev AI Platform by Ozbena ile yapay zeka uygulamalarını hızla geliştirin, eğitin ve ölçekleyin.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a84ff;
+            --primary-dark: #0066cc;
+            --secondary: #00d4ff;
+            --accent: #7b61ff;
+            --bg-dark: #0b0f19;
+            --bg-card: #121826;
+            --text: #e8eef7;
+            --text-muted: #9aa8c0;
+            --gradient: linear-gradient(135deg, #0a84ff 0%, #00d4ff 50%, #7b61ff 100%);
+            --gradient-soft: linear-gradient(135deg, rgba(10,132,255,0.15), rgba(0,212,255,0.1));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== Header ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+        }
+
+        /* ===== Logo SVG Animations (GPU-friendly transforms) ===== */
+        .logo-icon .ring {
+            transform-origin: 24px 24px;
+            transform-box: fill-box;
+            animation: logo-spin 18s linear infinite;
+            will-change: transform;
+        }
+        .logo-icon .ring-dashed {
+            transform-origin: 24px 24px;
+            transform-box: fill-box;
+            animation: logo-spin-reverse 12s linear infinite;
+            will-change: transform;
+        }
+        .logo-icon .core {
+            transform-origin: center;
+            transform-box: fill-box;
+            animation: logo-pulse 2.8s ease-in-out infinite;
+            will-change: transform, opacity;
+        }
+        .logo-icon .node {
+            transform-origin: center;
+            transform-box: fill-box;
+            animation: node-glow 2.4s ease-in-out infinite;
+            will-change: opacity, transform;
+        }
+        .logo-icon .node-1 { animation-delay: 0s; }
+        .logo-icon .node-2 { animation-delay: 0.4s; }
+        .logo-icon .node-3 { animation-delay: 0.8s; }
+        .logo-icon .link {
+            stroke-dasharray: 12;
+            animation: link-flow 2.2s linear infinite;
+        }
+        .logo-icon .link-2 { animation-delay: 0.35s; }
+        .logo-icon .link-3 { animation-delay: 0.7s; }
+
+        /* ----- Logo keyframes ----- */
+        @keyframes logo-spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        @keyframes logo-spin-reverse {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(-360deg); }
+        }
+        @keyframes logo-pulse {
+            0%, 100% { transform: scale3d(1, 1, 1);    opacity: 1; }
+            50%      { transform: scale3d(0.92, 0.92, 1); opacity: 0.85; }
+        }
+        @keyframes node-glow {
+            0%, 100% { opacity: 0.75; transform: scale3d(1, 1, 1); }
+            50%      { opacity: 1;    transform: scale3d(1.12, 1.12, 1); }
+        }
+        @keyframes link-flow {
+            to { stroke-dashoffset: -24; }
+        }
+
+        /* ----- Page keyframes (compositor-only) ----- */
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 28px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translate3d(0, 0, 0); }
+            50%      { transform: translate3d(0, -12px, 0); }
+        }
+        @keyframes gradient-shift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes shimmer {
+            0%   { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes border-glow {
+            0%, 100% { box-shadow: 0 0 0 1px rgba(10,132,255,0.15), 0 0 20px rgba(10,132,255,0.05); }
+            50%      { box-shadow: 0 0 0 1px rgba(0,212,255,0.35), 0 0 32px rgba(123,97,255,0.12); }
+        }
+        @keyframes count-pop {
+            0%   { transform: scale(0.6); opacity: 0; }
+            70%  { transform: scale(1.08); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Hover: logo hızlandır */
+        .logo:hover .ring         { animation-duration: 6s; }
+        .logo:hover .ring-dashed  { animation-duration: 4s; }
+        .logo:hover .core         { animation-duration: 1.4s; }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .logo-icon .ring,
+            .logo-icon .ring-dashed,
+            .logo-icon .core,
+            .logo-icon .node,
+            .logo-icon .link,
+            .hero-badge,
+            .hero h1,
+            .hero p,
+            .hero-actions,
+            .hero-stats,
+            .hero-visual,
+            .feature-card {
+                animation: none !important;
+            }
+        }
+
+        .logo-text-wrap {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.28rem;
+            letter-spacing: -0.03em;
+        }
+
+        .logo-text span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-by {
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+            margin-top: 1px;
+        }
+
+        .logo-by strong {
+            color: #c4b5fd;
+            font-weight: 600;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--text);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 11px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 20px rgba(10, 132, 255, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(10, 132, 255, 0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .btn-lg {
+            padding: 16px 32px;
+            font-size: 1.05rem;
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 24px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(10,132,255,0.18) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -10%;
+            left: -5%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(123,97,255,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gradient-soft);
+            border: 1px solid rgba(10,132,255,0.25);
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--secondary);
+            margin-bottom: 24px;
+            animation: fade-up 0.7s ease-out both;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.4rem, 5vw, 3.6rem);
+            font-weight: 800;
+            line-height: 1.12;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+            animation: fade-up 0.8s ease-out 0.1s both;
+        }
+
+        .hero h1 span {
+            background: var(--gradient);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 6s ease infinite;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 520px;
+            margin-bottom: 36px;
+            animation: fade-up 0.8s ease-out 0.2s both;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 48px;
+            animation: fade-up 0.8s ease-out 0.3s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 36px;
+            animation: fade-up 0.8s ease-out 0.4s both;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: count-pop 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both;
+        }
+
+        .stat span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .hero-visual {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+            position: relative;
+            animation: fade-up 0.9s ease-out 0.25s both, float 5s ease-in-out 1.2s infinite, border-glow 4s ease-in-out infinite;
+        }
+
+        .hero-visual::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 21px;
+            padding: 1px;
+            background: var(--gradient);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .window-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .window-bar span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.12);
+        }
+
+        .window-bar span:nth-child(1) { background: #ff5f57; }
+        .window-bar span:nth-child(2) { background: #febc2e; }
+        .window-bar span:nth-child(3) { background: #28c840; }
+
+        .code-line {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .code-line .num { color: #4a5568; min-width: 18px; }
+        .code-line .kw { color: #c792ea; }
+        .code-line .fn { color: #82aaff; }
+        .code-line .str { color: #c3e88d; }
+        .code-line .cm { color: #546e7a; }
+
+        /* ===== Features ===== */
+        .section {
+            padding: 100px 24px;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 640px;
+            margin: 0 auto 60px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            font-weight: 750;
+            letter-spacing: -0.02em;
+            margin-bottom: 14px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.08rem;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 32px 28px;
+            transition: all 0.3s ease;
+            animation: fade-up 0.7s ease-out both;
+        }
+        .feature-card:nth-child(1) { animation-delay: 0.05s; }
+        .feature-card:nth-child(2) { animation-delay: 0.12s; }
+        .feature-card:nth-child(3) { animation-delay: 0.19s; }
+        .feature-card:nth-child(4) { animation-delay: 0.26s; }
+        .feature-card:nth-child(5) { animation-delay: 0.33s; }
+        .feature-card:nth-child(6) { animation-delay: 0.40s; }
+
+        .feature-card:hover {
+            border-color: rgba(10,132,255,0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--gradient-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.15rem;
+            font-weight: 650;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ===== CTA ===== */
+        .cta {
+            padding: 80px 24px 120px;
+        }
+
+        .cta-box {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--gradient-soft);
+            border: 1px solid rgba(10,132,255,0.2);
+            border-radius: 24px;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .cta-box h2 {
+            font-size: 2rem;
+            font-weight: 750;
+            margin-bottom: 14px;
+        }
+
+        .cta-box p {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            font-size: 1.1rem;
+        }
+
+        /* ===== Footer ===== */
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: 40px 24px;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-brand svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .footer-brand span {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 900px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+            .hero-visual { order: -1; }
+            .features-grid { grid-template-columns: 1fr; }
+            nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Logo -->
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <!-- OmniDev by Ozbena Logo (Animated SVG) -->
+                <svg class="logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="OmniDev by Ozbena">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#0a84ff"/>
+                            <stop offset="50%" stop-color="#00d4ff"/>
+                            <stop offset="100%" stop-color="#7b61ff"/>
+                        </linearGradient>
+                        <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+                            <feGaussianBlur stdDeviation="1.4" result="blur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+
+                    <!-- Outer solid ring (slow spin) -->
+                    <circle class="ring" cx="24" cy="24" r="21.5" stroke="url(#logoGrad)" stroke-width="2.2" fill="none" opacity="0.85"/>
+
+                    <!-- Dashed orbit ring (reverse spin) -->
+                    <circle class="ring-dashed" cx="24" cy="24" r="16.5" stroke="url(#logoGrad)" stroke-width="1.3" fill="none" opacity="0.45" stroke-dasharray="4 5"/>
+
+                    <!-- Connection links (flowing dash) -->
+                    <line class="link link-1" x1="24" y1="15.5" x2="24" y2="20" stroke="#0b0f19" stroke-width="2" stroke-linecap="round"/>
+                    <line class="link link-2" x1="29.2" y1="27.8" x2="32.2" y2="30.2" stroke="#0b0f19" stroke-width="2" stroke-linecap="round"/>
+                    <line class="link link-3" x1="18.8" y1="27.8" x2="15.8" y2="30.2" stroke="#0b0f19" stroke-width="2" stroke-linecap="round"/>
+
+                    <!-- Core (pulse) -->
+                    <circle class="core" cx="24" cy="24" r="7.5" fill="url(#logoGrad)" filter="url(#softGlow)"/>
+
+                    <!-- Neural nodes (staggered glow) -->
+                    <circle class="node node-1" cx="24" cy="11.5" r="3.2" fill="#00d4ff" filter="url(#softGlow)"/>
+                    <circle class="node node-2" cx="34.5" cy="30.5" r="3.2" fill="#7b61ff" filter="url(#softGlow)"/>
+                    <circle class="node node-3" cx="13.5" cy="30.5" r="3.2" fill="#0a84ff" filter="url(#softGlow)"/>
+                </svg>
+                <div class="logo-text-wrap">
+                    <div class="logo-text">Omni<span>Dev</span></div>
+                    <div class="logo-by">by <strong>Ozbena</strong></div>
+                </div>
+            </a>
+
+            <nav>
+                <a href="#features">Özellikler</a>
+                <a href="#platform">Platform</a>
+                <a href="#pricing">Fiyatlandırma</a>
+                <a href="#docs">Dokümantasyon</a>
+                <a href="#cta" class="btn btn-primary">Hemen Başla</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-container">
+            <div>
+                <div class="hero-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    OmniDev AI Platform by Ozbena
+                </div>
+                <h1>Yapay Zeka Geliştirmenin <span>Geleceği</span></h1>
+                <p>
+                    Tek platformda model eğitimi, dağıtım, izleme ve ölçekleme. 
+                    OmniDev ile fikirden production’a dakikalar içinde geçin.
+                </p>
+                <div class="hero-actions">
+                    <a href="#cta" class="btn btn-primary btn-lg">Ücretsiz Dene</a>
+                    <a href="#features" class="btn btn-outline btn-lg">Nasıl Çalışır?</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <strong>12k+</strong>
+                        <span>Aktif geliştirici</span>
+                    </div>
+                    <div class="stat">
+                        <strong>98%</strong>
+                        <span>Uptime garantisi</span>
+                    </div>
+                    <div class="stat">
+                        <strong>40+</strong>
+                        <span>Hazır model</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="window-bar">
+                    <span></span><span></span><span></span>
+                </div>
+                <div class="code-line"><span class="num">1</span><span class="cm">// OmniDev by Ozbena</span></div>
+                <div class="code-line"><span class="num">2</span><span class="kw">import</span> { OmniClient } <span class="kw">from</span> <span class="str">'@omnidev/sdk'</span></div>
+                <div class="code-line"><span class="num">3</span></div>
+                <div class="code-line"><span class="num">4</span><span class="kw">const</span> client = <span class="kw">new</span> <span class="fn">OmniClient</span>({</div>
+                <div class="code-line"><span class="num">5</span>&nbsp;&nbsp;apiKey: <span class="str">process.env.OMNI_KEY</span></div>
+                <div class="code-line"><span class="num">6</span>})</div>
+                <div class="code-line"><span class="num">7</span></div>
+                <div class="code-line"><span class="num">8</span><span class="kw">const</span> model = <span class="kw">await</span> client.<span class="fn">deploy</span>({</div>
+                <div class="code-line"><span class="num">9</span>&nbsp;&nbsp;name: <span class="str">'vision-v2'</span>,</div>
+                <div class="code-line"><span class="num">10</span>&nbsp;&nbsp;scale: <span class="str">'auto'</span></div>
+                <div class="code-line"><span class="num">11</span>})</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section" id="features">
+        <div class="section-header">
+            <h2>Neden OmniDev by Ozbena?</h2>
+            <p>Geliştiricilerin gerçekten ihtiyaç duyduğu araçlar, karmaşıklık olmadan.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Hızlı Prototipleme</h3>
+                <p>Hazır şablonlar ve tek tıkla ortam kurulumlarıyla dakikalar içinde çalışan bir model elde edin.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Model Yönetimi</h3>
+                <p>Eğitim, fine-tuning, versiyonlama ve A/B testlerini tek panelden yönetin.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>Otomatik Ölçekleme</h3>
+                <p>Trafiğe göre otomatik ölçeklenen altyapı. Sadece kullandığınız kadar ödeyin.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Kurumsal Güvenlik</h3>
+                <p>SOC2, GDPR uyumlu. Verileriniz sizin kontrolünüzde kalır.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔌</div>
+                <h3>Kolay Entegrasyon</h3>
+                <p>Python, Node, REST ve GraphQL desteği. Mevcut stack’inize sorunsuz bağlanır.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Gerçek Zamanlı İzleme</h3>
+                <p>Latency, maliyet ve doğruluk metriklerini canlı takip edin, alarm kurun.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="cta">
+        <div class="cta-box">
+            <h2>OmniDev ile bugün başlayın</h2>
+            <p>by Ozbena — Yapay zeka geliştirmenin en temiz yolu.</p>
+            <a href="#" class="btn btn-primary btn-lg">Ücretsiz Hesap Oluştur</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#0a84ff"/>
+                            <stop offset="50%" stop-color="#00d4ff"/>
+                            <stop offset="100%" stop-color="#7b61ff"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="24" cy="24" r="22" stroke="url(#footerGrad)" stroke-width="2.5" fill="none"/>
+                    <circle cx="24" cy="24" r="8" fill="url(#footerGrad)"/>
+                    <circle cx="24" cy="12" r="3.2" fill="#00d4ff"/>
+                    <circle cx="34" cy="30" r="3.2" fill="#7b61ff"/>
+                    <circle cx="14" cy="30" r="3.2" fill="#0a84ff"/>
+                </svg>
+                <span>OmniDev <span style="color:var(--text-muted);font-weight:400">by Ozbena</span></span>
+            </div>
+            <div class="footer-copy">
+                © 2026 Ozbena. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
