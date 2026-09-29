@@ -12,20 +12,19 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
       
-      - name: Clean Gradle cache and daemon
-        run: |
-          rm -rf ~/.gradle/wrapper/dists/
-          rm -rf ~/.gradle/caches/
-          ./gradlew --stop || true
-      
-      - uses: gradle/actions/setup-gradle@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
       
       - name: Build debug APK
         run: ./gradlew assembleDebug --stacktrace --no-daemon
       
-      - uses: actions/upload-artifact@v4
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        if: success()
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 5
